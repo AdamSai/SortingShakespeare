@@ -1,6 +1,6 @@
 # Sorting Shakespeare  
 ## [Git LFS is required if you want to download the shakespeare-complete-works.txt file along with the project](https://git-lfs.github.com/)  
-Otherwise you should replace the path to your local shakespeare file.  
+Otherwise you should replace the path to your local shakespeare file inside of `program.cs` on line 17.  
 
 This is my solution to the [Sorting Shakespeare project](https://datsoftlyngby.github.io/soft2020spring/resources/d34f80c6-01-miniproject-sorting-shakespeare.pdf).  
 
