@@ -5,21 +5,21 @@
     {
         public class ArraySorter<T> where T : IComparable<T>
         {
-            public T[] Queue { get; }
-            public int HeapSize { get; private set; }
+            private readonly T[] _queue;
+            private int _heapSize;
             private bool _isSortedAscending;
 
             // Max size of the entire tree
-            private int MaxHeapSize { get; }
+            private readonly int _maxHeapSize;
 
 
             public ArraySorter(T[] items, int heapSize)
             {
-                Queue = new T[heapSize];
-                HeapSize = items.Length;
-                MaxHeapSize = heapSize;
+                _queue = new T[heapSize];
+                _heapSize = items.Length;
+                _maxHeapSize = heapSize;
                 // Copy contents of items array to the queue.
-                for (var i = 0; i < items.Length; i++) Queue[i] = items[i];
+                for (var i = 0; i < items.Length; i++) _queue[i] = items[i];
             }
 
             public void SortAscending()
@@ -40,26 +40,26 @@
             /// <param name="lambda">A lambda expression with 2 types T and should return a bool</param>
             public void Sort(Func<T, T, bool> lambda)
             {
-                var length = HeapSize;
+                var length = _heapSize;
                 BuildHeap(lambda);
 
                 for (var i = length - 1; i >= 0; i--)
                 {
                     // Move current root to end 
-                    Exchange(Queue, 0, i);
+                    Exchange(_queue, 0, i);
 
                     // call heapify on the reduced heap 
-                    Heapify(Queue, i, 0, lambda);
+                    Heapify(_queue, i, 0, lambda);
                 }
                 // Get the sorting order by comparing root to the last element
-                _isSortedAscending = Queue[0].CompareTo(Queue[HeapSize - 1]) < 0;
+                _isSortedAscending = _queue[0].CompareTo(_queue[_heapSize - 1]) < 0;
             }
 
             private void BuildHeap(Func<T, T, bool> lambda)
             {
-                for (var i = HeapSize / 2 - 1; i >= 0; i--)
+                for (var i = _heapSize / 2 - 1; i >= 0; i--)
                 {
-                    Heapify(Queue, HeapSize, i, lambda);
+                    Heapify(_queue, _heapSize, i, lambda);
                 }
             }
 
@@ -94,8 +94,8 @@
             /// <exception cref="Exception">Throws exception if queue is full</exception>
             public void Enqueue(T item)
             {
-                if (HeapSize == MaxHeapSize) throw new Exception("Queue is full!");
-                Queue[HeapSize++] = item;
+                if (_heapSize == _maxHeapSize) throw new Exception("Queue is full!");
+                _queue[_heapSize++] = item;
 
                 if (_isSortedAscending)
                     BuildHeap((x, y) => x.CompareTo(y) < 0);
@@ -112,12 +112,12 @@
             /// <exception cref="Exception">Throws exception if the queue is empty</exception>
             public T Dequeue()
             {
-                if (HeapSize == 0)
+                if (_heapSize == 0)
                     throw new Exception("Queue is empty, can't dequeue.");
-                var root = Queue[0];
+                var root = _queue[0];
                 // Move last element to the root
-                Queue[0] = Queue[--HeapSize];
-                Queue[HeapSize] = default;
+                _queue[0] = _queue[--_heapSize];
+                _queue[_heapSize] = default;
 
                 if(_isSortedAscending)
                     BuildHeap((x, y) => x.CompareTo(y) < 0);
