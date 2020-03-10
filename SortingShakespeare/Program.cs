@@ -40,9 +40,6 @@ namespace SortingShakespeare
             
             #endregion
             
-
-            
-            
             #region Merge Sort
             
             stopwatch = Stopwatch.StartNew();
@@ -51,16 +48,13 @@ namespace SortingShakespeare
             PrintElapsedTime(dataLength, stopwatch.ElapsedMilliseconds, "Merge Sort");
             
             #endregion
-
-
+            
             #region Heap Sort
             
             // Read the file again so the array is back in it's original state
             textProcessor.ProcessTextFile(@"..\..\..\shakespeare-complete-works.txt", regexPattern);
-            
             stopwatch = Stopwatch.StartNew();
-            ArraySorter<string> arraySorter = new ArraySorter<string>(textProcessor.ProcessedStrings, textProcessor.ProcessedStrings.Length);
-            arraySorter.SortAscending();
+            ArraySorter<string>.SortAscending(textProcessor.ProcessedStrings);
             stopwatch.Stop();
             PrintElapsedTime(dataLength, stopwatch.ElapsedMilliseconds, "Heap Sort");
             
